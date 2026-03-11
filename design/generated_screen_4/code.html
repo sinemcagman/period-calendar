@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Günlük Kayıt - Menstrual Cycle App</title>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '8px', // Based on ROUND_EIGHT
+          },
+          colors: {
+            // Dark mode palette with slight saturation (Saturation 3)
+            brand: {
+              primary: '#FF4D8D', // Feminine highlight
+              surface: '#1E1B1E', // Dark background
+              card: '#2D282D',    // Card background
+              text: '#F5F5F5',
+              muted: '#A19A9A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scroll">
+    /* Hide scrollbar for cleaner mobile look */
+    body::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      background-color: #121012; /* Deep base color */
+    }
+  </style>
+</head>
+<body class="text-brand-text font-sans selection:bg-brand-primary/30">
+<!-- BEGIN: MainContainer -->
+<main class="min-h-screen max-w-md mx-auto p-6 flex flex-col gap-8 pb-24">
+<!-- BEGIN: Header -->
+<header class="flex items-center justify-between" data-purpose="screen-header">
+<button aria-label="Geri" class="p-2 -ml-2 text-brand-text/80">
+<svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<h1 class="text-xl font-bold tracking-tight">Günlük Kayıt</h1>
+<div class="w-8"></div> <!-- Spacer for centering -->
+</header>
+<!-- END: Header -->
+<!-- BEGIN: MoodSection -->
+<section class="flex flex-col gap-4" data-purpose="mood-selector">
+<h2 class="text-lg font-semibold text-brand-text">Nasıl Hissediyorsun?</h2>
+<div class="grid grid-cols-4 gap-3">
+<!-- Mutlu -->
+<button class="flex flex-col items-center gap-2 p-3 bg-brand-card rounded-custom border border-transparent hover:border-brand-primary/50 transition-all active:scale-95" data-purpose="mood-item">
+<span class="text-3xl">😊</span>
+<span class="text-xs font-medium text-brand-muted">Mutlu</span>
+</button>
+<!-- Yorgun -->
+<button class="flex flex-col items-center gap-2 p-3 bg-brand-card rounded-custom border border-transparent hover:border-brand-primary/50 transition-all active:scale-95" data-purpose="mood-item">
+<span class="text-3xl">😴</span>
+<span class="text-xs font-medium text-brand-muted">Yorgun</span>
+</button>
+<!-- Sinirli -->
+<button class="flex flex-col items-center gap-2 p-3 bg-brand-card rounded-custom border border-transparent hover:border-brand-primary/50 transition-all active:scale-95" data-purpose="mood-item">
+<span class="text-3xl">😠</span>
+<span class="text-xs font-medium text-brand-muted">Sinirli</span>
+</button>
+<!-- Hassas -->
+<button class="flex flex-col items-center gap-2 p-3 bg-brand-card rounded-custom border border-transparent hover:border-brand-primary/50 transition-all active:scale-95" data-purpose="mood-item">
+<span class="text-3xl">🥺</span>
+<span class="text-xs font-medium text-brand-muted">Hassas</span>
+</button>
+</div>
+</section>
+<!-- END: MoodSection -->
+<!-- BEGIN: PhysicalSymptomsSection -->
+<section class="flex flex-col gap-4" data-purpose="symptoms-selector">
+<h2 class="text-lg font-semibold text-brand-text">Fiziksel Belirtiler</h2>
+<div class="flex flex-wrap gap-2">
+<!-- Symptom Chips -->
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="px-5 py-3 rounded-custom bg-brand-card border border-brand-card peer-checked:bg-brand-primary/20 peer-checked:border-brand-primary peer-checked:text-brand-primary transition-all text-sm font-medium text-brand-muted">
+            Baş ağrısı
+          </div>
+</label>
+<label class="cursor-pointer group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="px-5 py-3 rounded-custom bg-brand-card border border-brand-card peer-checked:bg-brand-primary/20 peer-checked:border-brand-primary peer-checked:text-brand-primary transition-all text-sm font-medium text-brand-muted">
+            Kramp
+          </div>
+</label>
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="px-5 py-3 rounded-custom bg-brand-card border border-brand-card peer-checked:bg-brand-primary/20 peer-checked:border-brand-primary peer-checked:text-brand-primary transition-all text-sm font-medium text-brand-muted">
+            Akne
+          </div>
+</label>
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="px-5 py-3 rounded-custom bg-brand-card border border-brand-card peer-checked:bg-brand-primary/20 peer-checked:border-brand-primary peer-checked:text-brand-primary transition-all text-sm font-medium text-brand-muted">
+            Göğüs hassasiyeti
+          </div>
+</label>
+<!-- Additional UI flavor items -->
+<label class="cursor-pointer group">
+<input class="hidden peer" type="checkbox"/>
+<div class="px-5 py-3 rounded-custom bg-brand-card border border-brand-card peer-checked:bg-brand-primary/20 peer-checked:border-brand-primary peer-checked:text-brand-primary transition-all text-sm font-medium text-brand-muted">
+            Sırt ağrısı
+          </div>
+</label>
+</div>
+</section>
+<!-- END: PhysicalSymptomsSection -->
+<!-- BEGIN: NotesSection -->
+<section class="flex flex-col gap-4" data-purpose="notes-input">
+<h2 class="text-lg font-semibold text-brand-text">Notlar</h2>
+<textarea class="w-full bg-brand-card border-none rounded-custom p-4 text-brand-text placeholder-brand-muted focus:ring-2 focus:ring-brand-primary min-h-[120px]" placeholder="Bugün hakkında eklemek istediğin bir şey var mı?"></textarea>
+</section>
+<!-- END: NotesSection -->
+<!-- BEGIN: ActionFooter -->
+<div class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-brand-surface via-brand-surface to-transparent md:max-w-md md:mx-auto">
+<button class="w-full bg-brand-primary hover:bg-brand-primary/90 text-white font-bold py-4 rounded-custom shadow-lg shadow-brand-primary/20 transition-transform active:scale-95" data-purpose="save-button" type="submit">
+        Kaydet
+      </button>
+</div>
+<!-- END: ActionFooter -->
+</main>
+<!-- END: MainContainer -->
+<script data-purpose="interactivity">
+    // Simple visual feedback for mood selection
+    document.querySelectorAll('[data-purpose="mood-item"]').forEach(button => {
+      button.addEventListener('click', function() {
+        // Reset others
+        document.querySelectorAll('[data-purpose="mood-item"]').forEach(b => {
+          b.classList.remove('bg-brand-primary/20', 'border-brand-primary');
+          b.classList.add('bg-brand-card', 'border-transparent');
+          b.querySelector('span:last-child').classList.replace('text-brand-primary', 'text-brand-muted');
+        });
+        // Select current
+        this.classList.remove('bg-brand-card', 'border-transparent');
+        this.classList.add('bg-brand-primary/20', 'border-brand-primary');
+        this.querySelector('span:last-child').classList.replace('text-brand-muted', 'text-brand-primary');
+      });
+    });
+  </script>
+</body></html>

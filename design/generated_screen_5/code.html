@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>İstatistikler - Menstrual Cycle App</title>
+<!-- Tailwind CSS with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Chart.js for data visualization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '8px',
+          },
+          colors: {
+            // Dark Theme Palette
+            darkBg: '#0F172A',
+            darkCard: '#1E293B',
+            accent: '#F472B6', // Pinkish accent for cycle app
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #0F172A; /* darkBg */
+      color: #F8FAFC;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+    }
+    /* Custom scrollbar for dark mode */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased pb-20">
+<!-- BEGIN: MainHeader -->
+<header class="p-6 sticky top-0 bg-darkBg/80 backdrop-blur-md z-10" data-purpose="header">
+<div class="flex items-center justify-between">
+<h1 class="text-2xl font-extrabold tracking-tight">İstatistikler</h1>
+<button class="p-2 bg-darkCard rounded-custom">
+<svg class="h-6 w-6 text-accent" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="px-6 space-y-6">
+<!-- BEGIN: SummaryCard -->
+<section class="bg-darkCard p-5 rounded-custom border border-slate-700 shadow-xl" data-purpose="summary-section">
+<div class="flex items-center space-x-4">
+<div class="flex-shrink-0 bg-accent/20 p-3 rounded-full">
+<svg class="h-6 w-6 text-accent" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Durum Özeti</h2>
+<p class="text-lg font-medium">Döngünüz oldukça düzenli görünüyor.</p>
+</div>
+</div>
+</section>
+<!-- END: SummaryCard -->
+<!-- BEGIN: LineChartSection -->
+<section class="bg-darkCard p-5 rounded-custom border border-slate-700 shadow-sm" data-purpose="cycle-length-analysis">
+<h3 class="text-lg font-bold mb-4">Son 6 Ay Döngü Uzunluğu</h3>
+<div class="chart-container">
+<canvas id="cycleLineChart"></canvas>
+</div>
+<div class="mt-4 flex justify-between text-xs text-slate-400">
+<span>Ortalama: 28 Gün</span>
+<span>En Kısa: 26 Gün</span>
+<span>En Uzun: 30 Gün</span>
+</div>
+</section>
+<!-- END: LineChartSection -->
+<!-- BEGIN: PieChartSection -->
+<section class="bg-darkCard p-5 rounded-custom border border-slate-700 shadow-sm" data-purpose="symptom-analysis">
+<h3 class="text-lg font-bold mb-4">Sık Görülen Belirtiler</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+<div class="chart-container" style="height: 200px;">
+<canvas id="symptomsPieChart"></canvas>
+</div>
+<ul class="space-y-3" data-purpose="symptom-legend">
+<li class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-full bg-pink-500"></span>
+<span class="text-sm">Kramp</span>
+</div>
+<span class="text-sm font-bold">%40</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-full bg-purple-500"></span>
+<span class="text-sm">Baş Ağrısı</span>
+</div>
+<span class="text-sm font-bold">%30</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-full bg-blue-500"></span>
+<span class="text-sm">Yorgunluk</span>
+</div>
+<span class="text-sm font-bold">%20</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-full bg-slate-500"></span>
+<span class="text-sm">Diğer</span>
+</div>
+<span class="text-sm font-bold">%10</span>
+</li>
+</ul>
+</div>
+</section>
+<!-- END: PieChartSection -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-darkCard/95 border-t border-slate-700 px-6 py-3 flex justify-between items-center backdrop-blur-lg" data-purpose="mobile-nav">
+<div class="flex flex-col items-center opacity-50">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1">Takvim</span>
+</div>
+<div class="flex flex-col items-center text-accent">
+<svg class="h-6 w-6" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+</svg>
+<span class="text-[10px] mt-1">İstatistik</span>
+</div>
+<div class="flex flex-col items-center opacity-50">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1">Profil</span>
+</div>
+</nav>
+<!-- END: BottomNavigation -->
+<!-- BEGIN: ChartScripts -->
+<script data-purpose="cycle-line-chart-setup">
+    const ctxLine = document.getElementById('cycleLineChart').getContext('2d');
+    new Chart(ctxLine, {
+      type: 'line',
+      data: {
+        labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran'],
+        datasets: [{
+          label: 'Gün Sayısı',
+          data: [28, 27, 30, 26, 29, 28],
+          borderColor: '#F472B6',
+          backgroundColor: 'rgba(244, 114, 182, 0.1)',
+          fill: true,
+          tension: 0.4,
+          borderWidth: 3,
+          pointRadius: 4,
+          pointBackgroundColor: '#F472B6'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            min: 24,
+            max: 32,
+            grid: { color: '#334155' },
+            ticks: { color: '#94A3B8', stepSize: 2 }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: '#94A3B8' }
+          }
+        }
+      }
+    });
+  </script>
+<script data-purpose="symptoms-pie-chart-setup">
+    const ctxPie = document.getElementById('symptomsPieChart').getContext('2d');
+    new Chart(ctxPie, {
+      type: 'doughnut',
+      data: {
+        labels: ['Kramp', 'Baş Ağrısı', 'Yorgunluk', 'Diğer'],
+        datasets: [{
+          data: [40, 30, 20, 10],
+          backgroundColor: [
+            '#EC4899',
+            '#A855F7',
+            '#3B82F6',
+            '#64748B'
+          ],
+          borderWidth: 0,
+          cutout: '70%'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  </script>
+<!-- END: ChartScripts -->
+</body></html>

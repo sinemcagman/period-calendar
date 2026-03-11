@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sağlık Köşesi - Regl Takibi</title>
+<!-- Load Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '8px', // Based on ROUND_EIGHT
+          },
+          colors: {
+            'dark-bg': '#121212',
+            'dark-card': '#1E1E1E',
+            'accent-pink': '#FF4D8D',
+            'accent-purple': '#9D50BB',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout-styles">
+    /* Hide scrollbar for the horizontal carousel while maintaining functionality */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Subtle gradient overlay for cards */
+    .card-overlay {
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%);
+    }
+  </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans antialiased min-h-screen">
+<!-- BEGIN: MainContainer -->
+<main class="max-w-md mx-auto p-5 space-y-8">
+<!-- BEGIN: HeaderSection -->
+<header class="flex justify-between items-center pt-4" data-purpose="page-header">
+<div>
+<h1 class="text-3xl font-extrabold tracking-tight">Sağlık Köşesi</h1>
+<p class="text-gray-400 text-sm mt-1">Döngünüze özel ipuçları ve öneriler</p>
+</div>
+<button aria-label="Search" class="w-10 h-10 rounded-full bg-dark-card flex items-center justify-center border border-gray-800">
+<svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</header>
+<!-- END: HeaderSection -->
+<!-- BEGIN: FeaturedCarousel -->
+<section data-purpose="featured-articles">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-lg font-bold">Öne Çıkanlar</h2>
+<a class="text-accent-pink text-xs font-semibold uppercase tracking-wider" href="#">Tümünü Gör</a>
+</div>
+<!-- Horizontal Scrollable Container -->
+<div class="flex overflow-x-auto gap-4 no-scrollbar pb-4 snap-x">
+<!-- Card 1: Kramplar -->
+<article class="flex-none w-72 h-48 relative overflow-hidden rounded-custom snap-start bg-zinc-800" data-purpose="content-card">
+<img alt="Regl krampları için rahatlama" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8Yzrfy9MNvOo4MdwCJwVqZOSjLfm_CcQPw4VzF7i5rhx-Itc8oSgL9YFleVJVQM-7F9sFZ3NwY7DnFzuUpRcd3CCwjwrpYaWkxnkyGl_pEnH-LwwWdhXdOaFaY3X4Lo8xyQSON5t9F-NWS8VlS6whuAt442Ap8Q6ne7-2yggccz-m_G5G2gPA0lD635oLcNHf4tSZoY4NxIwS59GQoqt-wYbIci-LjhZ6MLLxjV0m1OsNtx-JXiYKQPi3MeYDI5JcrFye3S3hVkE"/>
+<div class="absolute inset-0 card-overlay flex flex-col justify-end p-4">
+<span class="bg-accent-pink text-[10px] font-bold px-2 py-0.5 rounded-full w-fit mb-2">AĞRI YÖNETİMİ</span>
+<h3 class="text-lg font-bold leading-tight">Kramplara ne iyi gelir?</h3>
+</div>
+</article>
+<!-- Card 2: Beslenme -->
+<article class="flex-none w-72 h-48 relative overflow-hidden rounded-custom snap-start bg-zinc-800" data-purpose="content-card">
+<img alt="Regl dönemi beslenme" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtM-lMR9kIRq_cRLknCPdR1rejcZ6Eh-nfYdBjGChgivxcgZev95pyF4KvyDIb6uaCLKLkR6_B6L2fZUzoWDC3bdHZzlBrs1HSTO-Os57kWn-z9yquU2N1eXgG6JCZFAo-rZsO07Aya5hfLeyvC8-UY_DvpukNVg-l9z4wU3OZ3Ce15A5DwY2AiXlg_bENnsS0V8AQnCVGdkm2iJssbTkYoPGMQplCQL2REVxmeH8UmZSkvlzQWZpxJrM-qbjtyRayIwAtXUEll0Y"/>
+<div class="absolute inset-0 card-overlay flex flex-col justify-end p-4">
+<span class="bg-accent-purple text-[10px] font-bold px-2 py-0.5 rounded-full w-fit mb-2">BESLENME</span>
+<h3 class="text-lg font-bold leading-tight">Regl döneminde beslenme</h3>
+</div>
+</article>
+</div>
+</section>
+<!-- END: FeaturedCarousel -->
+<!-- BEGIN: ListSection -->
+<section class="space-y-4" data-purpose="vertical-content-list">
+<h2 class="text-lg font-bold mb-4">Diğer Başlıklar</h2>
+<!-- List Item 1: Egzersiz -->
+<div class="flex items-center gap-4 p-4 bg-dark-card rounded-custom border border-gray-800 hover:border-gray-700 transition-colors" data-purpose="list-item">
+<div class="w-16 h-16 rounded-custom overflow-hidden flex-shrink-0 bg-zinc-800">
+<img alt="Regl ve Egzersiz" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ooeSYjOtUYaWj4uBb73cbe5ACLrIc6T6GmOMKCMCmcQf3CNalLG-0BrMwj7r6Gdb2jeTxQQ-p2SCjyv2Ko8OFc1oKTt7fr3NPoOvtG3K3CF4sf2XS35tW8k3Lu64OOqz9YPoYkoqwBirUjDfb7DuKHO8FqezoNfV3yYXRBj4ucPEC29WGxEGj9cmOXP2luk0KKdJChC94NgJpLT54g3YLr5YxOtvGOKM_3zjKXdwEO4SnXFpEj04mWV0XLMyoEVUHEUz4Gn0AIU"/>
+</div>
+<div class="flex-grow">
+<h3 class="font-bold text-sm mb-1">Egzersiz ve Regl</h3>
+<p class="text-xs text-gray-400 line-clamp-1">Hareket etmek sancılarınızı azaltabilir mi?</p>
+<div class="flex items-center gap-2 mt-2">
+<span class="text-[10px] text-gray-500">4 dk okuma</span>
+<span class="text-[10px] text-gray-500">•</span>
+<span class="text-[10px] text-accent-pink">Yeni</span>
+</div>
+</div>
+<svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<!-- List Item 2: Mental Health -->
+<div class="flex items-center gap-4 p-4 bg-dark-card rounded-custom border border-gray-800 hover:border-gray-700 transition-colors" data-purpose="list-item">
+<div class="w-16 h-16 rounded-custom overflow-hidden flex-shrink-0 bg-zinc-800">
+<img alt="Ruh Sağlığı" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP6shlvAKhM9JIoVBGw837DqclMtKI7n2CJvaGD8-dGKxFej74uq1FL-Vd8FlN1VNU6gsidNGUJodUNbGDgDneJVX7bD3Gm075dEv59r4mKcZNwyeZsBMZ6oQEEl_szGW5wHS_Hxkwm9Y57wCxWCunP7k1z17CttUjEFMIFxo5jbI5C4VPirD5Q1402Txexf2JglxAWUNevAiH0OrG67gCzGq_oHXQoC7XylFsgcCdfuD7hbnyWYJPbdzzBH16QRx6GkAwpOAwi7w"/>
+</div>
+<div class="flex-grow">
+<h3 class="font-bold text-sm mb-1">Mod Değişimleri</h3>
+<p class="text-xs text-gray-400 line-clamp-1">PMS ile başa çıkmanın 5 yolu.</p>
+<div class="flex items-center gap-2 mt-2">
+<span class="text-[10px] text-gray-500">6 dk okuma</span>
+</div>
+</div>
+<svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<!-- List Item 3: Sleep -->
+<div class="flex items-center gap-4 p-4 bg-dark-card rounded-custom border border-gray-800 hover:border-gray-700 transition-colors" data-purpose="list-item">
+<div class="w-16 h-16 rounded-custom overflow-hidden flex-shrink-0 bg-zinc-800">
+<img alt="Uyku Düzeni" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHjMAuEpUD5OCanlYcKEi4lqhNR-2syQI1EESejg_77T7UwZX5X9uxIfD7nRcXDegGP1BgHuoBG6A11kRkdFZ8po6bq3ChGU22lqEYKPYaozzJIFg_WNFNa9eJiBxqga6bQ2icd0YewAJOV9jr-zatIlxkjWzxqFjMZu7e-4roW6EpCABYA4MCKmViGTwjvuv6Qeb75twe33cJVvnBqxSFWyeWEaZq6dvyyvIP6NlxiFnJXeFUKK2tr4Sq7QaSH8CSOlAVdYtoBPQ"/>
+</div>
+<div class="flex-grow">
+<h3 class="font-bold text-sm mb-1">Uyku Kalitesi</h3>
+<p class="text-xs text-gray-400 line-clamp-1">Daha iyi bir gece uykusu için öneriler.</p>
+<div class="flex items-center gap-2 mt-2">
+<span class="text-[10px] text-gray-500">3 dk okuma</span>
+</div>
+</div>
+<svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</section>
+<!-- END: ListSection -->
+<!-- BEGIN: QuickTip -->
+<section class="p-6 bg-gradient-to-br from-accent-pink/20 to-accent-purple/20 rounded-custom border border-white/5" data-purpose="daily-tip">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-xl">💡</span>
+<h3 class="text-sm font-bold uppercase tracking-widest text-accent-pink">Günün İpucu</h3>
+</div>
+<p class="text-sm leading-relaxed text-gray-300">
+        Magnezyum açısından zengin besinler (muz, bitter çikolata gibi) kramp şiddetini azaltmaya yardımcı olabilir.
+      </p>
+</section>
+<!-- END: QuickTip -->
+</main>
+<!-- END: MainContainer -->
+</body></html>

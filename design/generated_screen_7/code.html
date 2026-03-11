@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ayarlar ve Envanter</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '8px', // Based on ROUND_EIGHT
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    body {
+      font-family: 'Manrope', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style data-purpose="layout-styling">
+    .card-shadow {
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    /* Specific styling for the iOS-style toggle */
+    .toggle-dot {
+      transition: all 0.3s ease-in-out;
+    }
+    input:checked ~ .toggle-dot {
+      transform: translateX(100%);
+      background-color: #fff;
+    }
+    input:checked ~ .toggle-bg {
+      background-color: #10b981; /* Green success color for toggle */
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
+<!-- BEGIN: MainContainer -->
+<main class="w-full max-w-md bg-white min-h-[600px] rounded-custom card-shadow overflow-hidden flex flex-col" data-purpose="app-container">
+<!-- BEGIN: Header -->
+<header class="p-6 border-b border-gray-100" data-purpose="header">
+<h1 class="text-2xl font-bold text-gray-800">Ayarlar ve Envanter</h1>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: SettingsSection -->
+<section class="p-6 space-y-6" data-purpose="settings-controls">
+<!-- Dark Mode Toggle -->
+<div class="flex items-center justify-between" data-purpose="dark-mode-setting">
+<span class="text-lg font-medium text-gray-700">Koyu Mod</span>
+<label class="flex items-center cursor-pointer relative" for="dark-mode-toggle">
+<input class="sr-only" id="dark-mode-toggle" type="checkbox"/>
+<div class="toggle-bg w-14 h-7 bg-gray-300 rounded-full shadow-inner"></div>
+<div class="toggle-dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow transition"></div>
+</label>
+</div>
+</section>
+<!-- END: SettingsSection -->
+<hr class="mx-6 border-gray-100"/>
+<!-- BEGIN: InventorySection -->
+<section class="p-6 flex-grow" data-purpose="inventory-tracking">
+<h2 class="text-xl font-semibold text-gray-800 mb-6">Hijyen Ürün Stok Takibi</h2>
+<div class="space-y-4">
+<!-- Ped Counter Item -->
+<div class="p-4 bg-red-50 border border-red-100 rounded-custom" data-purpose="item-ped">
+<div class="flex items-center justify-between mb-2">
+<div class="flex flex-col">
+<span class="text-lg font-bold text-gray-800">Ped</span>
+<!-- Warning text for low stock -->
+<span class="text-sm font-semibold text-red-600">Stok tükeniyor, alışveriş zamanı</span>
+</div>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full bg-white border border-red-200 flex items-center justify-center text-red-600 font-bold hover:bg-red-100">-</button>
+<span class="text-xl font-bold text-gray-900 min-w-[60px] text-center">2 adet</span>
+<button class="w-8 h-8 rounded-full bg-white border border-red-200 flex items-center justify-center text-red-600 font-bold hover:bg-red-100">+</button>
+</div>
+</div>
+</div>
+<!-- Tampon Counter Item -->
+<div class="p-4 bg-gray-50 border border-gray-100 rounded-custom" data-purpose="item-tampon">
+<div class="flex items-center justify-between">
+<span class="text-lg font-bold text-gray-800">Tampon</span>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 font-bold hover:bg-gray-100">-</button>
+<span class="text-xl font-bold text-gray-900 min-w-[60px] text-center">10 adet</span>
+<button class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 font-bold hover:bg-gray-100">+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: InventorySection -->
+<!-- BEGIN: FooterAction -->
+<footer class="p-6 bg-gray-50 border-t border-gray-100" data-purpose="navigation">
+<button class="w-full py-3 bg-rose-500 text-white font-bold rounded-custom shadow-md hover:bg-rose-600 transition-colors">
+        Ayarları Kaydet
+      </button>
+</footer>
+<!-- END: FooterAction -->
+</main>
+<!-- END: MainContainer -->
+</body></html>

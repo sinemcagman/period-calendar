@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hatırlatıcılar - Menstruasyon Takibi</title>
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Font: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '8px', // ROUND_EIGHT
+          },
+          colors: {
+            brand: {
+              primary: '#FF4D8D', // Feminine pink accent for the theme
+              secondary: '#1F1F23',
+              card: '#2A2A2E',
+              background: '#121214'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-styling">
+    body {
+      background-color: #121214; /* DARK MODE */
+      color: #FFFFFF;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Simple toggle switch styling */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #4B4B52;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #FF4D8D;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-10 bg-brand-background px-6 pt-12 pb-4 flex items-center justify-between" data-purpose="header-section">
+<div class="flex items-center gap-4">
+<button aria-label="Geri" class="p-2 -ml-2 hover:bg-white/5 rounded-full">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
+</button>
+<h1 class="text-2xl font-bold tracking-tight">Hatırlatıcılar</h1>
+</div>
+<div class="w-10"></div> <!-- Spacer for visual balance -->
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="px-6 py-4 space-y-6" data-purpose="reminder-list-container">
+<!-- BEGIN: ReminderItems -->
+<section class="space-y-4">
+<!-- Adet Hatırlatıcı Item -->
+<div class="bg-brand-card p-5 rounded-custom flex items-center justify-between border border-white/5 shadow-lg" data-purpose="reminder-card">
+<div class="space-y-1">
+<h3 class="text-lg font-semibold text-white">Adet Hatırlatıcı</h3>
+<p class="text-sm text-gray-400">2 gün önce, 09:00</p>
+</div>
+<label class="switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<!-- İlaç Vakti Item -->
+<div class="bg-brand-card p-5 rounded-custom flex items-center justify-between border border-white/5 shadow-lg" data-purpose="reminder-card">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<h3 class="text-lg font-semibold text-white">İlaç Vakti</h3>
+<span class="px-2 py-0.5 text-[10px] bg-brand-primary/20 text-brand-primary font-bold rounded-full uppercase tracking-wider">HER GÜN</span>
+</div>
+<p class="text-sm text-gray-400">21:00</p>
+</div>
+<label class="switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<!-- Özel Hatırlatıcı Item -->
+<div class="bg-brand-card p-5 rounded-custom flex items-center justify-between border border-white/5 shadow-lg" data-purpose="reminder-card">
+<div class="space-y-1">
+<h3 class="text-lg font-semibold text-white">Ped almayı unutma</h3>
+<p class="text-sm text-gray-400 italic">Özel hatırlatıcı</p>
+</div>
+<label class="switch">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+</section>
+<!-- END: ReminderItems -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: StickyFooterActions -->
+<footer class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-brand-background via-brand-background to-transparent pt-12">
+<button class="w-full bg-brand-primary hover:bg-opacity-90 active:scale-[0.98] transition-all text-white font-bold py-4 px-6 rounded-custom flex items-center justify-center gap-2 text-lg shadow-xl shadow-brand-primary/10" data-purpose="add-button" id="add-reminder-btn">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+      Yeni Hatırlatıcı Ekle
+    </button>
+</footer>
+<!-- END: StickyFooterActions -->
+<!-- BEGIN: InteractiveScripts -->
+<script data-purpose="button-interactions">
+    document.getElementById('add-reminder-btn').addEventListener('click', () => {
+      // Logic for adding a new reminder would go here
+      console.log('Opening Add Reminder Modal...');
+    });
+  </script>
+<!-- END: InteractiveScripts -->
+</body></html>
