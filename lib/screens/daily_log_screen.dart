@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../providers/cycle_provider.dart';
 import '../constants/app_strings.dart';
 import '../constants/app_colors.dart';
 
 class DailyLogScreen extends StatefulWidget {
+  /// If provided, the screen opens for this specific date (pushed as a route from calendar).
+  /// If null, it opens for today (used as a tab in dashboard).
   final DateTime? selectedDate;
   const DailyLogScreen({super.key, this.selectedDate});
 
@@ -14,14 +17,47 @@ class DailyLogScreen extends StatefulWidget {
 
 class _DailyLogScreenState extends State<DailyLogScreen> {
   late DateTime _logDate;
-  String _selectedMood = '';
+  final List<String> _selectedMoods = [];
   final List<String> _selectedSymptoms = [];
   final TextEditingController _notesController = TextEditingController();
+  bool _isEditing = false; // true if editing an existing log
+
+  /// Whether this screen was pushed as a separate route (from calendar) or used as a tab
+  bool get _isPushedRoute => widget.selectedDate != null;
 
   @override
   void initState() {
     super.initState();
     _logDate = widget.selectedDate ?? DateTime.now();
+    // Load existing log for this date after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadExistingLog();
+    });
+  }
+
+  void _loadExistingLog() {
+    final provider = Provider.of<CycleProvider>(context, listen: false);
+    String dayStr = DateTime(_logDate.year, _logDate.month, _logDate.day)
+        .toIso8601String()
+        .substring(0, 10);
+    
+    try {
+      final existingLog = provider.dailyLogs.firstWhere(
+        (log) => log.date.toIso8601String().substring(0, 10) == dayStr,
+      );
+      // Pre-fill the form with existing data
+      setState(() {
+        _isEditing = true;
+        _selectedMoods.clear();
+        _selectedMoods.addAll(existingLog.moodTypes);
+        _selectedSymptoms.clear();
+        _selectedSymptoms.addAll(existingLog.physicalSymptoms);
+        _notesController.text = existingLog.notes;
+      });
+    } catch (_) {
+      // No existing log for this date — fresh entry
+      _isEditing = false;
+    }
   }
   
   final List<Map<String, String>> _moods = [
@@ -67,30 +103,45 @@ class _DailyLogScreenState extends State<DailyLogScreen> {
       return;
     }
 
-    if (_selectedMood.isEmpty) {
+    // At least one piece of info must be provided
+    if (_selectedMoods.isEmpty && _selectedSymptoms.isEmpty && _notesController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lütfen ruh halinizi seçin.'), backgroundColor: AppColors.error),
+        const SnackBar(content: Text('Lütfen en az bir bilgi girin (ruh hali, belirti veya not).'), backgroundColor: AppColors.error),
       );
       return;
     }
     
     await Provider.of<CycleProvider>(context, listen: false).saveDailyLog(
       _logDate, 
-      _selectedMood, 
+      _selectedMoods, 
       _selectedSymptoms, 
       _notesController.text
     );
     
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Günlük kaydedildi.'), backgroundColor: AppColors.success),
+        const SnackBar(content: Text('Günlük kaydedildi ✓'), backgroundColor: AppColors.success),
       );
-      Navigator.pop(context); // Optional: close the screen after saving
+      
+      if (_isPushedRoute) {
+        // Pushed from calendar — go back to calendar
+        Navigator.pop(context, true); // return true to signal that data was saved
+      } else {
+        // Used as a tab — reset form for next entry
+        setState(() {
+          _selectedMoods.clear();
+          _selectedSymptoms.clear();
+          _notesController.clear();
+          _isEditing = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    String dateLabel = DateFormat('d MMMM EEEE', 'tr_TR').format(_logDate);
+    
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -98,15 +149,32 @@ class _DailyLogScreenState extends State<DailyLogScreen> {
           children: [
             // Header
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
                 children: [
-                  const SizedBox(width: 40), // Spacer for centering
-                  const Expanded(
-                    child: Text(
-                      AppStrings.dailyLogTitle,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  // Back button only when pushed as a route
+                  if (_isPushedRoute)
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios, size: 20),
+                      onPressed: () => Navigator.pop(context),
+                    )
+                  else
+                    const SizedBox(width: 40),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Text(
+                          _isEditing ? 'Günlüğü Düzenle' : AppStrings.dailyLogTitle,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          dateLabel,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 13, color: AppColors.brandPink, fontWeight: FontWeight.w600),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 40),
@@ -148,18 +216,22 @@ class _DailyLogScreenState extends State<DailyLogScreen> {
                     TextField(
                       controller: _notesController,
                       maxLines: 5,
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.newline,
+                      enableSuggestions: true,
+                      autocorrect: true,
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 14),
                       decoration: InputDecoration(
                         hintText: AppStrings.notesHint,
                         hintStyle: TextStyle(color: Colors.grey.shade600),
                         filled: true,
                         fillColor: Theme.of(context).cardColor,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: AppColors.brandPrimaryDark),
                         )
                       ),
@@ -183,9 +255,12 @@ class _DailyLogScreenState extends State<DailyLogScreen> {
             onPressed: _saveLog,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.brandPrimaryDark,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
-            child: const Text(AppStrings.saveBtn, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+            child: Text(
+              _isEditing ? 'Güncelle' : AppStrings.saveBtn, 
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ),
         ),
       ),
@@ -193,16 +268,22 @@ class _DailyLogScreenState extends State<DailyLogScreen> {
   }
 
   Widget _buildMoodItem(String label, String emoji) {
-    bool isSelected = _selectedMood == label;
+    bool isSelected = _selectedMoods.contains(label);
     return GestureDetector(
       onTap: () {
-        setState(() => _selectedMood = label);
+        setState(() {
+          if (isSelected) {
+            _selectedMoods.remove(label);
+          } else {
+            _selectedMoods.add(label);
+          }
+        });
       },
       child: Container(
         width: 75,
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.brandPrimaryDark.withOpacity(0.2) : Theme.of(context).cardColor,
+          color: isSelected ? AppColors.brandPrimaryDark.withValues(alpha: 0.2) : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? AppColors.brandPrimaryDark : Colors.transparent,
@@ -241,7 +322,7 @@ class _DailyLogScreenState extends State<DailyLogScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.brandPrimaryDark.withOpacity(0.2) : Theme.of(context).cardColor,
+          color: isSelected ? AppColors.brandPrimaryDark.withValues(alpha: 0.2) : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? AppColors.brandPrimaryDark : Theme.of(context).cardColor,

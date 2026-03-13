@@ -6,6 +6,7 @@ import '../providers/cycle_provider.dart';
 import '../constants/app_strings.dart';
 import '../constants/app_colors.dart';
 import '../models/daily_log.dart';
+import 'daily_log_screen.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -179,8 +180,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         },
                         selectedBuilder: (context, day, focusedDay) {
                           bool isPeriod = cycleProvider.isDayPeriod(day);
-                          Color bColor = isPeriod ? AppColors.periodPink : AppColors.brandPink;
-                          return _buildCell(day, bColor, Colors.white, Colors.white, false);
+                          if (isPeriod) {
+                            // Period day selected: solid red/pink
+                            return _buildCell(day, AppColors.periodPink, Colors.white, Colors.white, false);
+                          }
+                          // Non-period day selected: neutral highlight with thin border
+                          Color textColor = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black;
+                          return _buildCell(day, Colors.transparent, AppColors.brandPink, textColor, false);
                         },
                         outsideBuilder: (context, day, focusedDay) {
                           return Center(child: Text('${day.day}', style: TextStyle(color: Theme.of(context).disabledColor)));
@@ -224,22 +230,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   // Toggle Period Day Button
                   Expanded(
                     child: SizedBox(
-                      height: 50,
+                      height: 46,
                       child: ElevatedButton.icon(
                         icon: Icon(
                           cycleProvider.isDayPeriod(_selectedDay ?? DateTime.now())
                               ? Icons.remove_circle_outline
                               : Icons.water_drop,
                           color: Colors.white,
-                          size: 18,
+                          size: 16,
                         ),
                         label: Text(
                           cycleProvider.isDayPeriod(_selectedDay ?? DateTime.now())
-                              ? "Regl İşaretini Kaldır"
-                              : "Regl Günü İşaretle",
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                              ? "Regl Sil"
+                              : "Regl İşaretle",
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           DateTime now = DateTime.now();
                           DateTime selected = _selectedDay ?? now;
                           if (selected.isAfter(DateTime(now.year, now.month, now.day, 23, 59, 59))) {
@@ -248,13 +254,63 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             );
                             return;
                           }
-                          cycleProvider.togglePeriodDay(selected);
+                          await cycleProvider.togglePeriodDay(selected);
+                          if (mounted) setState(() {});
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: cycleProvider.isDayPeriod(_selectedDay ?? DateTime.now())
                               ? Colors.grey.shade700
                               : AppColors.periodPink,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Daily Log Button
+                  Expanded(
+                    child: SizedBox(
+                      height: 46,
+                      child: ElevatedButton.icon(
+                        icon: Icon(
+                          _getLogForDay(_selectedDay ?? DateTime.now(), cycleProvider.dailyLogs) != null
+                              ? Icons.edit_note
+                              : Icons.note_add,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        label: Text(
+                          _getLogForDay(_selectedDay ?? DateTime.now(), cycleProvider.dailyLogs) != null
+                              ? "Günlüğü Düzenle"
+                              : "Günlük Ekle",
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                        ),
+                        onPressed: () async {
+                          DateTime now = DateTime.now();
+                          DateTime selected = _selectedDay ?? now;
+                          if (selected.isAfter(DateTime(now.year, now.month, now.day, 23, 59, 59))) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Gelecek tarihler için günlük giremezsiniz.'), backgroundColor: AppColors.error),
+                            );
+                            return;
+                          }
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DailyLogScreen(selectedDate: selected),
+                            ),
+                          );
+                          // Reload data when returning from daily log screen
+                          if (result == true && mounted) {
+                            await cycleProvider.loadData();
+                            setState(() {});
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.brandPink,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
                         ),
                       ),
                     ),
@@ -310,7 +366,19 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Text("Ruh Hali: ${log.moodType}", style: const TextStyle(fontWeight: FontWeight.w500)),
+          if (log.moodTypes.isNotEmpty) ...[
+            Wrap(
+              spacing: 6.0,
+              runSpacing: 4.0,
+              children: log.moodTypes.map((m) => Chip(
+                label: Text(m, style: const TextStyle(fontSize: 10)),
+                backgroundColor: AppColors.periodPink.withValues(alpha: 0.15),
+                side: BorderSide.none,
+                padding: EdgeInsets.zero,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: -4),
+              )).toList(),
+            ),
+          ],
           if (log.physicalSymptoms.isNotEmpty) ...[
             const SizedBox(height: 8),
             Wrap(

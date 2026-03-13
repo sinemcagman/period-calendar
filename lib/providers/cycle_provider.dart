@@ -270,11 +270,11 @@ class CycleProvider with ChangeNotifier {
   }
   
   // Daily Logs
-  Future<void> saveDailyLog(DateTime date, String mood, List<String> symptoms, String notes) async {
+  Future<void> saveDailyLog(DateTime date, List<String> moods, List<String> symptoms, String notes) async {
     final db = await _db.database;
     final log = DailyLog(
       date: date, 
-      moodType: mood, 
+      moodTypes: moods, 
       physicalSymptoms: symptoms, 
       notes: notes
     );

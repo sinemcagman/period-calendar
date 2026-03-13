@@ -7,7 +7,6 @@ import '../constants/app_colors.dart';
 
 // Screens
 import 'calendar_screen.dart';
-import 'daily_log_screen.dart';
 import 'statistics_screen.dart';
 import 'settings_inventory_screen.dart';
 
@@ -22,9 +21,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
 
   List<Widget> _screens(void Function(int) onTabChange) => [
-    _HomeTab(onSettingsTabRequested: () => onTabChange(4)),
+    _HomeTab(onSettingsTabRequested: () => onTabChange(3)),
     const CalendarScreen(),
-    const DailyLogScreen(),
     const StatisticsScreen(),
     const SettingsInventoryScreen(),
   ];
@@ -54,10 +52,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
               icon: const Icon(Icons.calendar_month_outlined),
               label: AppStrings.navCalendar,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.edit_document),
-              label: AppStrings.navDiary,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.pie_chart_outline),
